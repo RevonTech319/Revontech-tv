@@ -1,0 +1,24 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/fastlipa/:match*",
+      "destination": "https://api.fastlipa.com/:match*"
+    },
+    {
+      "source": "/api/palmpesa/:match*",
+      "destination": "https://palmpesa.drmlelwa.co.tz/:match*"
+    },
+    {
+      "source": "/api/sonicpesa/:match*",
+      "destination": "https://api.sonicpesa.com/api/v1/:match*"
+    },
+    {
+      "source": "/api/snippe/:match*",
+      "destination": "https://api.snippe.sh/:match*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

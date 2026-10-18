@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <ImageView
+        android:id="@+id/warning_icon"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:src="@android:drawable/stat_sys_warning"
+        android:tint="@color/accent_gold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/no_internet_title"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:gravity="center" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/no_internet_desc"
+        android:textColor="@color/gray_text"
+        android:textSize="14dp"
+        android:gravity="center"
+        android:lineSpacingExtra="4dp" />
+
+    <Button
+        android:id="@+id/btn_retry"
+        android:layout_width="200dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="32dp"
+        android:backgroundTint="@color/primary"
+        android:text="@string/retry_button"
+        android:textColor="@color/white"
+        android:textSize="14dp"
+        android:textStyle="bold" />
+
+</LinearLayout>

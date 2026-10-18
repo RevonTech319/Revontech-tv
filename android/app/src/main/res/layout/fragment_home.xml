@@ -1,0 +1,551 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- Promotional Banner Slider -->
+        <RelativeLayout
+            android:id="@+id/slider_container"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:background="#0F172A"
+            android:visibility="gone">
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/banner_view_pager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <!-- Smooth visual fade-out gradient to background -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/slider_gradient" />
+
+            <!-- Dots Indicator Container -->
+            <LinearLayout
+                android:id="@+id/banner_indicator_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="16dp"
+                android:orientation="horizontal"
+                android:gravity="center" />
+        </RelativeLayout>
+
+        <!-- Category selector horizontally scrollable -->
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none"
+            android:paddingVertical="12dp"
+            android:paddingHorizontal="16dp">
+
+            <LinearLayout
+                android:id="@+id/category_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
+        </HorizontalScrollView>
+
+        <!-- SwipeRefreshLayout wrapping the RecyclerView -->
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <!-- Native channel listing grid -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_channels"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingHorizontal="8dp"
+                    android:clipToPadding="false" />
+
+                <!-- YouTube-style Skeleton Shimmer Loader -->
+                <androidx.core.widget.NestedScrollView
+                    android:id="@+id/empty_state"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone"
+                    android:fillViewport="true">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="12dp">
+
+                        <!-- Category Chips Placeholders -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingHorizontal="8dp"
+                            android:layout_marginBottom="16dp">
+
+                            <View
+                                android:layout_width="60dp"
+                                android:layout_height="28dp"
+                                android:layout_marginEnd="12dp"
+                                android:background="@drawable/skeleton_text_capsule" />
+
+                            <View
+                                android:layout_width="80dp"
+                                android:layout_height="28dp"
+                                android:layout_marginEnd="12dp"
+                                android:background="@drawable/skeleton_text_capsule" />
+
+                            <View
+                                android:layout_width="70dp"
+                                android:layout_height="28dp"
+                                android:layout_marginEnd="12dp"
+                                android:background="@drawable/skeleton_text_capsule" />
+
+                            <View
+                                android:layout_width="75dp"
+                                android:layout_height="28dp"
+                                android:background="@drawable/skeleton_text_capsule" />
+                        </LinearLayout>
+
+                        <!-- Channel Cards Grid Placeholders (Dynamic Columns) -->
+                        <GridLayout
+                            android:id="@+id/skeleton_grid"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:columnCount="3"
+                            android:alignmentMode="alignMargins"
+                            android:columnOrderPreserved="false">
+
+                            <!-- Skeleton Card 1 -->
+                            <com.google.android.material.card.MaterialCardView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_columnWeight="1"
+                                android:layout_margin="6dp"
+                                app:cardCornerRadius="12dp"
+                                app:cardElevation="0dp"
+                                app:cardBackgroundColor="@color/card_bg"
+                                app:strokeColor="@color/border_color"
+                                app:strokeWidth="1dp">
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+                                    <View
+                                        android:id="@+id/sk_img1"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="140dp"
+                                        android:background="#1E293B" />
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@id/sk_img1"
+                                        android:orientation="vertical"
+                                        android:padding="8dp">
+                                        <View
+                                            android:layout_width="80dp"
+                                            android:layout_height="12dp"
+                                            android:background="@drawable/skeleton_text_capsule" />
+                                    </LinearLayout>
+                                </RelativeLayout>
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <!-- Skeleton Card 2 -->
+                            <com.google.android.material.card.MaterialCardView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_columnWeight="1"
+                                android:layout_margin="6dp"
+                                app:cardCornerRadius="12dp"
+                                app:cardElevation="0dp"
+                                app:cardBackgroundColor="@color/card_bg"
+                                app:strokeColor="@color/border_color"
+                                app:strokeWidth="1dp">
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+                                    <View
+                                        android:id="@+id/sk_img2"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="140dp"
+                                        android:background="#1E293B" />
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@id/sk_img2"
+                                        android:orientation="vertical"
+                                        android:padding="8dp">
+                                        <View
+                                            android:layout_width="65dp"
+                                            android:layout_height="12dp"
+                                            android:background="@drawable/skeleton_text_capsule" />
+                                    </LinearLayout>
+                                </RelativeLayout>
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <!-- Skeleton Card 3 -->
+                            <com.google.android.material.card.MaterialCardView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_columnWeight="1"
+                                android:layout_margin="6dp"
+                                app:cardCornerRadius="12dp"
+                                app:cardElevation="0dp"
+                                app:cardBackgroundColor="@color/card_bg"
+                                app:strokeColor="@color/border_color"
+                                app:strokeWidth="1dp">
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+                                    <View
+                                        android:id="@+id/sk_img3"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="140dp"
+                                        android:background="#1E293B" />
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@id/sk_img3"
+                                        android:orientation="vertical"
+                                        android:padding="8dp">
+                                        <View
+                                            android:layout_width="75dp"
+                                            android:layout_height="12dp"
+                                            android:background="@drawable/skeleton_text_capsule" />
+                                    </LinearLayout>
+                                </RelativeLayout>
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <!-- Skeleton Card 4 -->
+                            <com.google.android.material.card.MaterialCardView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_columnWeight="1"
+                                android:layout_margin="6dp"
+                                app:cardCornerRadius="12dp"
+                                app:cardElevation="0dp"
+                                app:cardBackgroundColor="@color/card_bg"
+                                app:strokeColor="@color/border_color"
+                                app:strokeWidth="1dp">
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+                                    <View
+                                        android:id="@+id/sk_img4"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="140dp"
+                                        android:background="#1E293B" />
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@id/sk_img4"
+                                        android:orientation="vertical"
+                                        android:padding="8dp">
+                                        <View
+                                            android:layout_width="70dp"
+                                            android:layout_height="12dp"
+                                            android:background="@drawable/skeleton_text_capsule" />
+                                    </LinearLayout>
+                                </RelativeLayout>
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <!-- Skeleton Card 5 -->
+                            <com.google.android.material.card.MaterialCardView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_columnWeight="1"
+                                android:layout_margin="6dp"
+                                app:cardCornerRadius="12dp"
+                                app:cardElevation="0dp"
+                                app:cardBackgroundColor="@color/card_bg"
+                                app:strokeColor="@color/border_color"
+                                app:strokeWidth="1dp">
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+                                    <View
+                                        android:id="@+id/sk_img5"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="140dp"
+                                        android:background="#1E293B" />
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@id/sk_img5"
+                                        android:orientation="vertical"
+                                        android:padding="8dp">
+                                        <View
+                                            android:layout_width="85dp"
+                                            android:layout_height="12dp"
+                                            android:background="@drawable/skeleton_text_capsule" />
+                                    </LinearLayout>
+                                </RelativeLayout>
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <!-- Skeleton Card 6 -->
+                            <com.google.android.material.card.MaterialCardView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_columnWeight="1"
+                                android:layout_margin="6dp"
+                                app:cardCornerRadius="12dp"
+                                app:cardElevation="0dp"
+                                app:cardBackgroundColor="@color/card_bg"
+                                app:strokeColor="@color/border_color"
+                                app:strokeWidth="1dp">
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+                                    <View
+                                        android:id="@+id/sk_img6"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="140dp"
+                                        android:background="#1E293B" />
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@id/sk_img6"
+                                        android:orientation="vertical"
+                                        android:padding="8dp">
+                                        <View
+                                            android:layout_width="60dp"
+                                            android:layout_height="12dp"
+                                            android:background="@drawable/skeleton_text_capsule" />
+                                    </LinearLayout>
+                                </RelativeLayout>
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <!-- Skeleton Card 7 -->
+                            <com.google.android.material.card.MaterialCardView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_columnWeight="1"
+                                android:layout_margin="6dp"
+                                app:cardCornerRadius="12dp"
+                                app:cardElevation="0dp"
+                                app:cardBackgroundColor="@color/card_bg"
+                                app:strokeColor="@color/border_color"
+                                app:strokeWidth="1dp">
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+                                    <View
+                                        android:id="@+id/sk_img7"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="140dp"
+                                        android:background="#1E293B" />
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@id/sk_img7"
+                                        android:orientation="vertical"
+                                        android:padding="8dp">
+                                        <View
+                                            android:layout_width="72dp"
+                                            android:layout_height="12dp"
+                                            android:background="@drawable/skeleton_text_capsule" />
+                                    </LinearLayout>
+                                </RelativeLayout>
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <!-- Skeleton Card 8 -->
+                            <com.google.android.material.card.MaterialCardView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_columnWeight="1"
+                                android:layout_margin="6dp"
+                                app:cardCornerRadius="12dp"
+                                app:cardElevation="0dp"
+                                app:cardBackgroundColor="@color/card_bg"
+                                app:strokeColor="@color/border_color"
+                                app:strokeWidth="1dp">
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+                                    <View
+                                        android:id="@+id/sk_img8"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="140dp"
+                                        android:background="#1E293B" />
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@id/sk_img8"
+                                        android:orientation="vertical"
+                                        android:padding="8dp">
+                                        <View
+                                            android:layout_width="64dp"
+                                            android:layout_height="12dp"
+                                            android:background="@drawable/skeleton_text_capsule" />
+                                    </LinearLayout>
+                                </RelativeLayout>
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <!-- Skeleton Card 9 -->
+                            <com.google.android.material.card.MaterialCardView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_columnWeight="1"
+                                android:layout_margin="6dp"
+                                app:cardCornerRadius="12dp"
+                                app:cardElevation="0dp"
+                                app:cardBackgroundColor="@color/card_bg"
+                                app:strokeColor="@color/border_color"
+                                app:strokeWidth="1dp">
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+                                    <View
+                                        android:id="@+id/sk_img9"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="140dp"
+                                        android:background="#1E293B" />
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@id/sk_img9"
+                                        android:orientation="vertical"
+                                        android:padding="8dp">
+                                        <View
+                                            android:layout_width="80dp"
+                                            android:layout_height="12dp"
+                                            android:background="@drawable/skeleton_text_capsule" />
+                                    </LinearLayout>
+                                </RelativeLayout>
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <!-- Skeleton Card 10 -->
+                            <com.google.android.material.card.MaterialCardView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_columnWeight="1"
+                                android:layout_margin="6dp"
+                                app:cardCornerRadius="12dp"
+                                app:cardElevation="0dp"
+                                app:cardBackgroundColor="@color/card_bg"
+                                app:strokeColor="@color/border_color"
+                                app:strokeWidth="1dp">
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+                                    <View
+                                        android:id="@+id/sk_img10"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="140dp"
+                                        android:background="#1E293B" />
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@id/sk_img10"
+                                        android:orientation="vertical"
+                                        android:padding="8dp">
+                                        <View
+                                            android:layout_width="78dp"
+                                            android:layout_height="12dp"
+                                            android:background="@drawable/skeleton_text_capsule" />
+                                    </LinearLayout>
+                                </RelativeLayout>
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <!-- Skeleton Card 11 -->
+                            <com.google.android.material.card.MaterialCardView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_columnWeight="1"
+                                android:layout_margin="6dp"
+                                app:cardCornerRadius="12dp"
+                                app:cardElevation="0dp"
+                                app:cardBackgroundColor="@color/card_bg"
+                                app:strokeColor="@color/border_color"
+                                app:strokeWidth="1dp">
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+                                    <View
+                                        android:id="@+id/sk_img11"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="140dp"
+                                        android:background="#1E293B" />
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@id/sk_img11"
+                                        android:orientation="vertical"
+                                        android:padding="8dp">
+                                        <View
+                                            android:layout_width="74dp"
+                                            android:layout_height="12dp"
+                                            android:background="@drawable/skeleton_text_capsule" />
+                                    </LinearLayout>
+                                </RelativeLayout>
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <!-- Skeleton Card 12 -->
+                            <com.google.android.material.card.MaterialCardView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_columnWeight="1"
+                                android:layout_margin="6dp"
+                                app:cardCornerRadius="12dp"
+                                app:cardElevation="0dp"
+                                app:cardBackgroundColor="@color/card_bg"
+                                app:strokeColor="@color/border_color"
+                                app:strokeWidth="1dp">
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+                                    <View
+                                        android:id="@+id/sk_img12"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="140dp"
+                                        android:background="#1E293B" />
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@id/sk_img12"
+                                        android:orientation="vertical"
+                                        android:padding="8dp">
+                                        <View
+                                            android:layout_width="68dp"
+                                            android:layout_height="12dp"
+                                            android:background="@drawable/skeleton_text_capsule" />
+                                    </LinearLayout>
+                                </RelativeLayout>
+                            </com.google.android.material.card.MaterialCardView>
+
+                        </GridLayout>
+                    </LinearLayout>
+                </androidx.core.widget.NestedScrollView>
+            </RelativeLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </LinearLayout>
+
+    <!-- Floating Action Button for WhatsApp Support -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_whatsapp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="20dp"
+        android:backgroundTint="#25D366"
+        android:src="@drawable/ic_whatsapp"
+        android:tint="@android:color/white"
+        android:contentDescription="WhatsApp Support"
+        app:borderWidth="0dp"
+        app:elevation="6dp" />
+
+</FrameLayout>

@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /login
+Disallow: /profile
+Disallow: /payment
+Disallow: /notifications
+Disallow: /player/
+
+Sitemap: https://revontechtv.online/sitemap.xml

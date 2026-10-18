@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Revontech Tv</string>
+    <string name="no_internet_title">Hakuna Muunganisho wa Mtandao</string>
+    <string name="no_internet_desc">Tafadhali angalia mtandao wako wa Wi-Fi au data ya simu kisha ujaribu tena.</string>
+    <string name="retry_button">Jaribu Tena</string>
+    <string name="loading_text">Inapakia Revontech Tv...</string>
+</resources>
