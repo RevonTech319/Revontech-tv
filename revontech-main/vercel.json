@@ -1,0 +1,32 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/fastlipa/:match*",
+      "destination": "https://api.fastlipa.com/:match*"
+    },
+    {
+      "source": "/api/palmpesa/:match*",
+      "destination": "https://palmpesa.drmlelwa.co.tz/:match*"
+    },
+    {
+      "source": "/api/sonicpesa/:match*",
+      "destination": "https://api.sonicpesa.com/api/v1/:match*"
+    },
+    {
+      "source": "/api/snippe/:match*",
+      "destination": "https://api.snippe.sh/:match*"
+    },
+    {
+      "source": "/api/v1/:match*",
+      "destination": "https://us-central1-revontech-6c62d.cloudfunctions.net/tokenApi/v1/:match*"
+    },
+    {
+      "source": "/api/v2/:match*",
+      "destination": "https://us-central1-revontech-6c62d.cloudfunctions.net/tokenApi/v2/:match*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
