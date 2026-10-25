@@ -6,12 +6,11 @@ Unashiriki TOKEN tu (au unaweka token kwenye links zako). Website nyingine ina c
 
 1. Fungua **Admin → API → Keys**, bonyeza **Tengeneza key mpya** na uchague **Type 1 · Token API**.
 2. **Nakili key mara moja** — haionyeshwi tena.
-3. Jaribu: `curl -H "X-API-Key: YOUR_API_KEY" https://us-central1-revontech-6c62d.cloudfunctions.net/tokenApi/v1/token`
+3. Jaribu: `curl -H "X-API-Key: YOUR_API_KEY" https://www.revontechtv.online/api/v1/token`
 
 ## Base URL
 
-- Direct (inafanya kazi mara tu function ikideploy): `https://us-central1-revontech-6c62d.cloudfunctions.net/tokenApi/v1`
-- Kupitia domain yako (baada ya hosting deploy): `https://www.revontechtv.online/api/v1`
+- Domain yako (Vercel): `https://www.revontechtv.online/api/v1`
 
 ## Uthibitisho (Authentication)
 
@@ -47,7 +46,7 @@ Ruhusa: hakuna (public)
 
 ```bash
 curl \
-  "https://us-central1-revontech-6c62d.cloudfunctions.net/tokenApi/v1/status"
+  "https://www.revontechtv.online/api/v1/status"
 ```
 
 **Mfano wa jibu**
@@ -66,7 +65,7 @@ curl \
 **JavaScript (browser)**
 
 ```javascript
-const url = new URL("https://us-central1-revontech-6c62d.cloudfunctions.net/tokenApi/v1/status");
+const url = new URL("https://www.revontechtv.online/api/v1/status");
 
 const res = await fetch(url, {
   headers: {
@@ -79,7 +78,7 @@ console.log(json);
 **Node.js**
 
 ```javascript
-const url = new URL("https://us-central1-revontech-6c62d.cloudfunctions.net/tokenApi/v1/status");
+const url = new URL("https://www.revontechtv.online/api/v1/status");
 
 const res = await fetch(url, {
   headers: {
@@ -93,7 +92,7 @@ console.log(json);
 
 ```php
 <?php
-$ch = curl_init('https://us-central1-revontech-6c62d.cloudfunctions.net/tokenApi/v1/status');
+$ch = curl_init('https://www.revontechtv.online/api/v1/status');
 curl_setopt_array($ch, [
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_TIMEOUT => 10,
@@ -111,7 +110,7 @@ print_r($json);
 ```python
 import requests
 
-res = requests.get('https://us-central1-revontech-6c62d.cloudfunctions.net/tokenApi/v1/status', timeout=10)
+res = requests.get('https://www.revontechtv.online/api/v1/status', timeout=10)
 json = res.json()
 print(json)
 ```
@@ -128,7 +127,7 @@ Ruhusa: `token`
 
 ```bash
 curl \
-  "https://us-central1-revontech-6c62d.cloudfunctions.net/tokenApi/v1/token" \
+  "https://www.revontechtv.online/api/v1/token" \
   -H "X-API-Key: YOUR_API_KEY"
 ```
 
@@ -156,7 +155,7 @@ curl \
 **JavaScript (browser)**
 
 ```javascript
-const url = new URL("https://us-central1-revontech-6c62d.cloudfunctions.net/tokenApi/v1/token");
+const url = new URL("https://www.revontechtv.online/api/v1/token");
 
 const res = await fetch(url, {
   headers: {
@@ -171,7 +170,7 @@ console.log(json.data);
 **Node.js**
 
 ```javascript
-const url = new URL("https://us-central1-revontech-6c62d.cloudfunctions.net/tokenApi/v1/token");
+const url = new URL("https://www.revontechtv.online/api/v1/token");
 
 const res = await fetch(url, {
   headers: {
@@ -187,7 +186,7 @@ console.log(json.data);
 
 ```php
 <?php
-$ch = curl_init('https://us-central1-revontech-6c62d.cloudfunctions.net/tokenApi/v1/token');
+$ch = curl_init('https://www.revontechtv.online/api/v1/token');
 curl_setopt_array($ch, [
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_TIMEOUT => 10,
@@ -209,7 +208,7 @@ print_r($json['data']);
 ```python
 import requests
 
-res = requests.get('https://us-central1-revontech-6c62d.cloudfunctions.net/tokenApi/v1/token', headers={'X-API-Key': 'YOUR_API_KEY'}, timeout=10)
+res = requests.get('https://www.revontechtv.online/api/v1/token', headers={'X-API-Key': 'YOUR_API_KEY'}, timeout=10)
 json = res.json()
 if not json.get("success"):
     raise RuntimeError(json["error"]["code"])
@@ -233,7 +232,7 @@ Ruhusa: `resolve`
 ```bash
 curl \
   -G \
-  "https://us-central1-revontech-6c62d.cloudfunctions.net/tokenApi/v1/resolve" \
+  "https://www.revontechtv.online/api/v1/resolve" \
   -H "X-API-Key: YOUR_API_KEY" \
   --data-urlencode "url=https://cdnedgch2.azamtvltd.co.tz/live/eds/AzamSport1/DASH/AzamSport1.mpd"
 ```
@@ -258,7 +257,7 @@ curl \
 **JavaScript (browser)**
 
 ```javascript
-const url = new URL("https://us-central1-revontech-6c62d.cloudfunctions.net/tokenApi/v1/resolve");
+const url = new URL("https://www.revontechtv.online/api/v1/resolve");
 url.searchParams.set("url", "https://cdnedgch2.azamtvltd.co.tz/live/eds/AzamSport1/DASH/AzamSport1.mpd");
 
 const res = await fetch(url, {
@@ -274,7 +273,7 @@ console.log(json.data);
 **Node.js**
 
 ```javascript
-const url = new URL("https://us-central1-revontech-6c62d.cloudfunctions.net/tokenApi/v1/resolve");
+const url = new URL("https://www.revontechtv.online/api/v1/resolve");
 url.searchParams.set("url", "https://cdnedgch2.azamtvltd.co.tz/live/eds/AzamSport1/DASH/AzamSport1.mpd");
 
 const res = await fetch(url, {
@@ -291,7 +290,7 @@ console.log(json.data);
 
 ```php
 <?php
-$ch = curl_init('https://us-central1-revontech-6c62d.cloudfunctions.net/tokenApi/v1/resolve?' . http_build_query(['url' => 'https://cdnedgch2.azamtvltd.co.tz/live/eds/AzamSport1/DASH/AzamSport1.mpd']));
+$ch = curl_init('https://www.revontechtv.online/api/v1/resolve?' . http_build_query(['url' => 'https://cdnedgch2.azamtvltd.co.tz/live/eds/AzamSport1/DASH/AzamSport1.mpd']));
 curl_setopt_array($ch, [
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_TIMEOUT => 10,
@@ -313,7 +312,7 @@ print_r($json['data']);
 ```python
 import requests
 
-res = requests.get('https://us-central1-revontech-6c62d.cloudfunctions.net/tokenApi/v1/resolve', params={'url': 'https://cdnedgch2.azamtvltd.co.tz/live/eds/AzamSport1/DASH/AzamSport1.mpd'}, headers={'X-API-Key': 'YOUR_API_KEY'}, timeout=10)
+res = requests.get('https://www.revontechtv.online/api/v1/resolve', params={'url': 'https://cdnedgch2.azamtvltd.co.tz/live/eds/AzamSport1/DASH/AzamSport1.mpd'}, headers={'X-API-Key': 'YOUR_API_KEY'}, timeout=10)
 json = res.json()
 if not json.get("success"):
     raise RuntimeError(json["error"]["code"])
@@ -338,7 +337,7 @@ Ruhusa: `resolve`
 ```bash
 curl \
   -X POST \
-  "https://us-central1-revontech-6c62d.cloudfunctions.net/tokenApi/v1/resolve" \
+  "https://www.revontechtv.online/api/v1/resolve" \
   -H "X-API-Key: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"urls":["https://cdnedgch2.azamtvltd.co.tz/live/eds/AzamSport1/DASH/AzamSport1.mpd","https://other.example.com/live/index.m3u8"]}'
@@ -374,7 +373,7 @@ curl \
 **JavaScript (browser)**
 
 ```javascript
-const url = new URL("https://us-central1-revontech-6c62d.cloudfunctions.net/tokenApi/v1/resolve");
+const url = new URL("https://www.revontechtv.online/api/v1/resolve");
 
 const res = await fetch(url, {
   method: "POST",
@@ -397,7 +396,7 @@ console.log(json.data);
 **Node.js**
 
 ```javascript
-const url = new URL("https://us-central1-revontech-6c62d.cloudfunctions.net/tokenApi/v1/resolve");
+const url = new URL("https://www.revontechtv.online/api/v1/resolve");
 
 const res = await fetch(url, {
   method: "POST",
@@ -421,7 +420,7 @@ console.log(json.data);
 
 ```php
 <?php
-$ch = curl_init('https://us-central1-revontech-6c62d.cloudfunctions.net/tokenApi/v1/resolve');
+$ch = curl_init('https://www.revontechtv.online/api/v1/resolve');
 curl_setopt_array($ch, [
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_TIMEOUT => 10,
@@ -445,7 +444,7 @@ print_r($json['data']);
 ```python
 import requests
 
-res = requests.post('https://us-central1-revontech-6c62d.cloudfunctions.net/tokenApi/v1/resolve', json={"urls":["https://cdnedgch2.azamtvltd.co.tz/live/eds/AzamSport1/DASH/AzamSport1.mpd","https://other.example.com/live/index.m3u8"]}, headers={'X-API-Key': 'YOUR_API_KEY'}, timeout=10)
+res = requests.post('https://www.revontechtv.online/api/v1/resolve', json={"urls":["https://cdnedgch2.azamtvltd.co.tz/live/eds/AzamSport1/DASH/AzamSport1.mpd","https://other.example.com/live/index.m3u8"]}, headers={'X-API-Key': 'YOUR_API_KEY'}, timeout=10)
 json = res.json()
 if not json.get("success"):
     raise RuntimeError(json["error"]["code"])
@@ -470,7 +469,7 @@ Ruhusa: `channels`
 ```bash
 curl \
   -G \
-  "https://us-central1-revontech-6c62d.cloudfunctions.net/tokenApi/v1/channels" \
+  "https://www.revontechtv.online/api/v1/channels" \
   -H "X-API-Key: YOUR_API_KEY" \
   --data-urlencode "category=Sports"
 ```
@@ -512,7 +511,7 @@ curl \
 **JavaScript (browser)**
 
 ```javascript
-const url = new URL("https://us-central1-revontech-6c62d.cloudfunctions.net/tokenApi/v1/channels");
+const url = new URL("https://www.revontechtv.online/api/v1/channels");
 url.searchParams.set("category", "Sports");
 
 const res = await fetch(url, {
@@ -528,7 +527,7 @@ console.log(json.data);
 **Node.js**
 
 ```javascript
-const url = new URL("https://us-central1-revontech-6c62d.cloudfunctions.net/tokenApi/v1/channels");
+const url = new URL("https://www.revontechtv.online/api/v1/channels");
 url.searchParams.set("category", "Sports");
 
 const res = await fetch(url, {
@@ -545,7 +544,7 @@ console.log(json.data);
 
 ```php
 <?php
-$ch = curl_init('https://us-central1-revontech-6c62d.cloudfunctions.net/tokenApi/v1/channels?' . http_build_query(['category' => 'Sports']));
+$ch = curl_init('https://www.revontechtv.online/api/v1/channels?' . http_build_query(['category' => 'Sports']));
 curl_setopt_array($ch, [
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_TIMEOUT => 10,
@@ -567,7 +566,7 @@ print_r($json['data']);
 ```python
 import requests
 
-res = requests.get('https://us-central1-revontech-6c62d.cloudfunctions.net/tokenApi/v1/channels', params={'category': 'Sports'}, headers={'X-API-Key': 'YOUR_API_KEY'}, timeout=10)
+res = requests.get('https://www.revontechtv.online/api/v1/channels', params={'category': 'Sports'}, headers={'X-API-Key': 'YOUR_API_KEY'}, timeout=10)
 json = res.json()
 if not json.get("success"):
     raise RuntimeError(json["error"]["code"])
@@ -596,7 +595,7 @@ if (is_file($cache) && time() - filemtime($cache) < 30) {
     exit;
 }
 
-$ch = curl_init('https://us-central1-revontech-6c62d.cloudfunctions.net/tokenApi/v1/token');
+$ch = curl_init('https://www.revontechtv.online/api/v1/token');
 curl_setopt_array($ch, [
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_TIMEOUT        => 10,
@@ -627,7 +626,7 @@ export async function getToken() {
   const now = Date.now();
   if (cached && now < cached.refreshAt) return cached.token;
 
-  const res = await fetch("https://us-central1-revontech-6c62d.cloudfunctions.net/tokenApi/v1/token", {
+  const res = await fetch("https://www.revontechtv.online/api/v1/token", {
     headers: { "X-API-Key": "YOUR_API_KEY" },   // au piga proxy yako ya PHP badala yake
   });
   const json = await res.json();
@@ -649,7 +648,7 @@ Njia rahisi ni /resolve: unaipa link safi na inarudisha link tayari kucheza. Wek
 const CLEAN = "https://cdnedgch2.azamtvltd.co.tz/live/eds/AzamSport1/DASH/AzamSport1.mpd";
 
 async function getPlayableUrl() {
-  const res = await fetch("https://us-central1-revontech-6c62d.cloudfunctions.net/tokenApi/v1/resolve?url=" + encodeURIComponent(CLEAN), {
+  const res = await fetch("https://www.revontechtv.online/api/v1/resolve?url=" + encodeURIComponent(CLEAN), {
     headers: { "X-API-Key": "YOUR_API_KEY" },
   });
   const json = await res.json();

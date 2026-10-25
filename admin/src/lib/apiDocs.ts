@@ -8,13 +8,8 @@
 
 export const BASES = [
   {
-    id: 'direct',
-    label: 'Direct (inafanya kazi mara tu function ikideploy)',
-    url: 'https://us-central1-revontech-6c62d.cloudfunctions.net/tokenApi',
-  },
-  {
     id: 'domain',
-    label: 'Kupitia domain yako (baada ya hosting deploy)',
+    label: 'Domain yako (Vercel)',
     url: 'https://www.revontechtv.online/api',
   },
 ] as const;

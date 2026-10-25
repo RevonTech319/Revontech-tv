@@ -20,7 +20,8 @@
  * Type-2 keys carry their own sharing rules: share_mode (all | categories | selected),
  * categories[], channel_ids[], include_premium, include_drm. Anything missing = share less.
  *
- * Keys live in Firestore `api_keys/{sha256(key)}` (created in Admin → API Access).
+ * Keys live in Firestore as one document per key, named by the SHA-256 of the key
+ * (`api_keys/<hash>` by default, `settings/apikey_<hash>` on Vercel) – created in Admin → API.
  * The raw key is never stored – only its SHA-256 hash – so it is shown once.
  *
  * Kept free of firebase imports so it can be unit-tested with a fake database.
@@ -192,7 +193,12 @@ function buildM3u(items, { mode = 'direct', base = '', apiKey = '' } = {}) {
   return L.join('\n') + '\n';
 }
 
-function createTokenApi({ getDb, FieldValue, now = () => Date.now(), log = () => {} }) {
+/**
+ * @param keyPath where a key's document lives for a given sha256 hash. Default `api_keys/<hash>`
+ *                (Cloud Functions + Admin SDK). The Vercel deployment uses `settings/apikey_<hash>`
+ *                because `settings` is already admin-writable / public-readable under your rules.
+ */
+function createTokenApi({ getDb, FieldValue, now = () => Date.now(), log = () => {}, keyPath = (hash) => `api_keys/${hash}` }) {
   const keyCache = new Map();   // hash -> { at, data }
   const rate = new Map();       // hash -> { start, count }
   const usage = new Map();      // hash -> { pending, lastFlush }
@@ -202,7 +208,7 @@ function createTokenApi({ getDb, FieldValue, now = () => Date.now(), log = () =>
   async function getKey(db, hash) {
     const hit = keyCache.get(hash);
     if (hit && now() - hit.at < KEY_CACHE_MS) return hit.data;
-    const snap = await db.doc(`api_keys/${hash}`).get();
+    const snap = await db.doc(keyPath(hash)).get();
     const data = snap.exists ? snap.data() : null;
     keyCache.set(hash, { at: now(), data });
     return data;
@@ -251,7 +257,7 @@ function createTokenApi({ getDb, FieldValue, now = () => Date.now(), log = () =>
     const n = u.pending;
     u.pending = 0;
     u.lastFlush = now();
-    db.doc(`api_keys/${hash}`)
+    db.doc(keyPath(hash))
       .update({ request_count: FieldValue.increment(n), last_used_at: FieldValue.serverTimestamp() })
       .catch((e) => log('usage flush failed', e && e.message));
   }

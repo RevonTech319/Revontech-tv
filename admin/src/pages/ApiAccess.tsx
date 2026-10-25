@@ -33,8 +33,6 @@ interface ApiKey extends ShareValue {
   allowed_origins: string[];
   rate_limit_per_min: number;
   active: boolean;
-  request_count: number;
-  last_used_ms: number | null;
   created_ms: number | null;
   created_by?: string;
 }
@@ -75,6 +73,16 @@ function parseOrigins(raw: string): { list: string[]; bad: string[] } {
   });
   return { list, bad };
 }
+
+const KEY_PREFIX = 'apikey_'; // keys are stored as settings/apikey_<sha256 of the key>
+
+/** Firestore refused the write: the signed-in user is not in the admins collection. */
+const isDenied = (e: any) => e?.code === 'permission-denied' || /missing or insufficient permissions/i.test(String(e?.message || ''));
+
+const explain = (e: any): string =>
+  isDenied(e)
+    ? 'Huruhusiwi kuandika kwenye settings. Hakikisha umeingia kama admin (akaunti yako iko kwenye collection ya "admins").'
+    : e?.message || 'Hitilafu isiyojulikana';
 
 const EXAMPLE_URL = 'https://cdnedgch2.azamtvltd.co.tz/live/eds/AzamSport1/DASH/AzamSport1.mpd';
 
@@ -122,9 +130,8 @@ export default function ApiAccess() {
   const { toast } = useToast();
   const { user } = useAuth() as any;
   const [tab, setTab] = useState<Tab>('keys');
-  const [baseId, setBaseId] = useState<string>(BASES[0].id);
+  const [root, setRoot] = useState<string>(BASES[0].url);
   const [docType, setDocType] = useState<ApiType>('token');   // which API the Docs / Test tabs show
-  const root = BASES.find((b) => b.id === baseId)!.url;
   const base = apiBase(root, docType);
 
   // keys
@@ -143,7 +150,7 @@ export default function ApiAccess() {
   const load = async () => {
     setLoading(true);
     try {
-      const [snap, cSnap] = await Promise.all([getDocs(collection(db, 'api_keys')), getDocs(collection(db, 'channels'))]);
+      const [snap, cSnap] = await Promise.all([getDocs(collection(db, 'settings')), getDocs(collection(db, 'channels'))]);
       setChans(
         cSnap.docs
           .map((d) => { const c: any = d.data(); return { id: d.id, name: c.name || d.id, category: c.category || '', is_free: c.is_free === true || c.is_free === 'true', active: c.active !== false }; })
@@ -151,7 +158,7 @@ export default function ApiAccess() {
           .map(({ active: _a, ...c }) => c)
           .sort((a, b) => a.name.localeCompare(b.name))
       );
-      const list: ApiKey[] = snap.docs.map((d) => {
+      const list: ApiKey[] = snap.docs.filter((d) => d.id.startsWith(KEY_PREFIX)).map((d) => {
         const x: any = d.data();
         return {
           id: d.id, type: (x.type === 'channels' ? 'channels' : 'token') as ApiType,
@@ -160,13 +167,13 @@ export default function ApiAccess() {
           include_premium: x.include_premium === true, include_drm: x.include_drm === true,
           name: x.name || '(bila jina)', key_prefix: x.key_prefix || '', scopes: x.scopes || [],
           allowed_origins: x.allowed_origins || [], rate_limit_per_min: Number(x.rate_limit_per_min) || 60,
-          active: x.active !== false, request_count: Number(x.request_count) || 0,
-          last_used_ms: toMs(x.last_used_at), created_ms: toMs(x.created_at), created_by: x.created_by,
+          active: x.active !== false,
+          created_ms: toMs(x.created_at), created_by: x.created_by,
         };
       }).sort((a, b) => (b.created_ms || 0) - (a.created_ms || 0));
       setKeys(list);
     } catch (e: any) {
-      toast({ title: 'Hitilafu', description: e?.message || 'Imeshindwa kupakia keys', variant: 'destructive' });
+      toast({ title: 'Hitilafu', description: explain(e), variant: 'destructive' });
     }
     setLoading(false);
   };
@@ -209,15 +216,13 @@ export default function ApiAccess() {
     try {
       const key = generateKey();
       const hash = await sha256Hex(key);
-      await setDoc(doc(db, 'api_keys', hash), {
+      await setDoc(doc(db, 'settings', KEY_PREFIX + hash), {
         name,
         key_prefix: `${key.slice(0, 8)}…${key.slice(-4)}`,
         ...extra,
         allowed_origins: list,
         rate_limit_per_min: rate,
         active: true,
-        request_count: 0,
-        last_used_at: null,
         created_at: serverTimestamp(),
         created_by: user?.email || null,
       });
@@ -227,26 +232,26 @@ export default function ApiAccess() {
       setForm(emptyForm);
       await load();
     } catch (e: any) {
-      toast({ title: 'Hitilafu', description: e?.message, variant: 'destructive' });
+      { toast({ title: 'Hitilafu', description: explain(e), variant: 'destructive' }); }
     }
     setSaving(false);
   };
 
   const setActive = async (k: ApiKey, active: boolean) => {
     try {
-      await updateDoc(doc(db, 'api_keys', k.id), { active });
+      await updateDoc(doc(db, 'settings', k.id), { active });
       setKeys((p) => p.map((x) => (x.id === k.id ? { ...x, active } : x)));
       toast({ title: active ? 'Key imewashwa' : 'Key imezimwa', description: 'Athari huonekana ndani ya takriban sekunde 30.' });
-    } catch (e: any) { toast({ title: 'Hitilafu', description: e?.message, variant: 'destructive' }); }
+    } catch (e: any) { { toast({ title: 'Hitilafu', description: explain(e), variant: 'destructive' }); } }
   };
 
   const removeKey = async (k: ApiKey) => {
     if (!window.confirm(`Futa key "${k.name}"? Website inayoitumia itaacha kufanya kazi mara moja (ndani ya ~30s).`)) return;
     try {
-      await deleteDoc(doc(db, 'api_keys', k.id));
+      await deleteDoc(doc(db, 'settings', k.id));
       setKeys((p) => p.filter((x) => x.id !== k.id));
       toast({ title: 'Imefutwa' });
-    } catch (e: any) { toast({ title: 'Hitilafu', description: e?.message, variant: 'destructive' }); }
+    } catch (e: any) { { toast({ title: 'Hitilafu', description: explain(e), variant: 'destructive' }); } }
   };
 
   const openEdit = (k: ApiKey) => {
@@ -277,11 +282,11 @@ export default function ApiAccess() {
       include_drm: edit.include_drm,
     });
     try {
-      await updateDoc(doc(db, 'api_keys', k.id), patch);
+      await updateDoc(doc(db, 'settings', k.id), patch);
       await load();
       setOpenId(null);
       toast({ title: 'Imehifadhiwa', description: 'Mabadiliko yanaanza ndani ya takriban sekunde 30.' });
-    } catch (e: any) { toast({ title: 'Hitilafu', description: e?.message, variant: 'destructive' }); }
+    } catch (e: any) { { toast({ title: 'Hitilafu', description: explain(e), variant: 'destructive' }); } }
   };
 
   // docs
@@ -354,13 +359,14 @@ export default function ApiAccess() {
   const counts = useMemo(() => ({
     active: keys.filter((k) => k.active).length,
     total: keys.length,
-    reqs: keys.reduce((a, k) => a + k.request_count, 0),
+    channelKeys: keys.filter((k) => k.type === 'channels').length,
   }), [keys]);
 
   const BaseSelect = (
-    <select value={baseId} onChange={(e) => setBaseId(e.target.value)} className="w-full rounded-xl border border-border bg-background px-3 py-2 text-xs font-bold text-foreground outline-none focus:border-primary">
-      {BASES.map((b) => <option key={b.id} value={b.id}>{b.label}</option>)}
-    </select>
+    <div>
+      <label className="mb-1 block text-[11px] font-bold uppercase tracking-wider text-muted-foreground">Domain ya website yako (Vercel)</label>
+      <input value={root} onChange={(e) => setRoot(e.target.value.trim().replace(/\/+$/, ''))} placeholder="https://www.revontechtv.online/api" className="w-full rounded-xl border border-border bg-background px-3 py-2 font-mono text-xs text-foreground outline-none focus:border-primary" />
+    </div>
   );
 
   const TypeSwitch = (
@@ -399,7 +405,7 @@ export default function ApiAccess() {
                 <div className="flex flex-wrap items-center gap-2">
                   <CopyBtn text={newKey.key} label="Nakili key" />
                   {newKey.type === 'channels' && (
-                    <CopyBtn text={`${apiBase(BASES[0].url, 'channels')}/playlist.m3u?api_key=${newKey.key}`} label="Nakili URL ya playlist (IPTV)" />
+                    <CopyBtn text={`${apiBase(root, 'channels')}/playlist.m3u?api_key=${newKey.key}`} label="Nakili URL ya playlist (IPTV)" />
                   )}
                   <button onClick={() => { setDocType(newKey.type); setNewKey(null); setTab('docs'); }} className="rounded-lg bg-muted px-2.5 py-1.5 text-[11px] font-bold text-foreground hover:bg-primary/20">Fungua docs</button>
                 </div>
@@ -409,7 +415,7 @@ export default function ApiAccess() {
             )}
 
             <div className="grid grid-cols-3 gap-3">
-              {[['Keys', counts.total], ['Zinazofanya kazi', counts.active], ['Maombi (jumla)', counts.reqs.toLocaleString()]].map(([l, v]) => (
+              {[['Keys', counts.total], ['Zinazofanya kazi', counts.active], ['Channels API', counts.channelKeys]].map(([l, v]) => (
                 <div key={String(l)} className="rounded-2xl border border-border bg-card p-3">
                   <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{l}</p>
                   <p className="text-2xl font-black text-foreground">{v}</p>
@@ -501,7 +507,7 @@ export default function ApiAccess() {
                       </div>
                       <p className="text-[11px] text-muted-foreground">
                         {k.type === 'channels' && <>{sharedCount(k, chans)} channels · </>}
-                        {k.request_count.toLocaleString()} maombi · mwisho {fmt(k.last_used_ms)} · {k.rate_limit_per_min}/dk · {k.allowed_origins.length ? `${k.allowed_origins.length} origin` : 'origins zote'}
+                        imetengenezwa {fmt(k.created_ms)} · {k.rate_limit_per_min}/dk · {k.allowed_origins.length ? `${k.allowed_origins.length} origin` : 'origins zote'}
                       </p>
                       <div className="flex gap-2">
                         <button onClick={() => openEdit(k)} className="flex flex-1 items-center justify-center gap-1 rounded-lg bg-muted py-2 text-xs font-bold text-foreground hover:bg-primary/20">
@@ -547,7 +553,7 @@ export default function ApiAccess() {
                 <code className="min-w-0 flex-1 break-all text-xs font-bold text-foreground">{base}</code>
                 <CopyBtn text={base} />
               </div>
-              <p className="text-[11px] text-muted-foreground">"Direct" inafanya kazi mara tu <code>firebase deploy --only functions</code> ikimalizika. URL ya domain inahitaji pia <code>firebase deploy --only hosting:user</code>.</p>
+              <p className="text-[11px] text-muted-foreground">API inaishi kwenye website yako ile ile ya Vercel (folder <code>api/</code>) — hakuna kitu cha kudeploy Firebase. Inafanya kazi mara tu website ikideploy upya. Ukitumia domain nyingine (mf. <code>xxx.vercel.app</code>), ibadilishe hapo juu.</p>
             </div>
 
             <div className="space-y-2 rounded-2xl border border-border bg-card p-4 text-xs text-foreground">
